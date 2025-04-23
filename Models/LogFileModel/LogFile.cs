@@ -2,15 +2,14 @@
 using System.Globalization;
 using System.Text.RegularExpressions;
 
-namespace LogStandartization.Models
+namespace LogStandartization.Models.LogFileModel
 {
     public  class LogFile
     {
-        DateTime Date { get; set; }
-        LoggingLevel LoggingLevel { get; set; }
-
-        string CallingMethod { get; set; } = "DEFAULT";
-        string Message { get; set; }
+        public DateTime Date { get; set; }
+        public LoggingLevel LoggingLevel { get; set; }
+        public string CallingMethod { get; set; } = "DEFAULT";
+        public string Message { get; set; }
 
         /// <summary>
         /// Checks the format of the log line.
@@ -124,6 +123,35 @@ namespace LogStandartization.Models
                     level = LoggingLevel.Information;
                     return false;
             }
+        }
+
+        /// <summary>
+        /// Creates the output format of a log line.
+        /// </summary>
+        /// <returns>A log line.</returns>
+        public string ToOutputFormat()
+        {
+            string levelStr;
+            switch (LoggingLevel)
+            {
+                case LoggingLevel.Information:
+                    levelStr = "INFO";
+                    break;
+                case LoggingLevel.Warning:
+                    levelStr = "WARN";
+                    break;
+                case LoggingLevel.Error:
+                    levelStr = "ERROR";
+                    break;
+                case LoggingLevel.Debug:
+                    levelStr = "DEBUG";
+                    break;
+                default:
+                    levelStr = "INFO";
+                    break;
+            }
+
+            return $"{Date:dd-MM-yyyy}\t{Date:HH:mm:ss.ffff}\t{levelStr}\t{CallingMethod}\t{Message}";
         }
     }
 }
